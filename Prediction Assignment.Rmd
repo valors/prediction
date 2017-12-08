@@ -11,7 +11,7 @@ testing<-read.csv("pml-testing.csv")
 
 ```
 
-We do some exploratory analyses first and then we clean the data to eliminate NA columns.
+We do some exploratory analyses first and then we clean the data to eliminate NA columns and irrelevant timestamp and name variables.
 
 ```{r, warning=FALSE,results='hide',fig.keep='none'}
 str(training)
@@ -19,6 +19,9 @@ plot(training$classe)
 colSums(is.na(training))
 training<-training[, colSums(is.na(training))+colSums(is.na(testing)) == 0]
 testing<-testing[, colSums(is.na(training))+colSums(is.na(testing)) == 0]
+
+training<-training[,c(8:60)]
+testing<-testing[,c(8:60)]
 ```
 
 We will fit a Random Forest model, in order to predict the "classe" factor variable.
@@ -45,15 +48,15 @@ modFit <- train(classe ~ ., data = training,
 
 stopCluster(cluster)
 modFit
-confusionMatrix.train(modFit)
-pred1<-predict(modFit,testing)
-(1-0.9998)*100
+
 ```
 
 Finally, we check that the Accuracy is above 99% and predict 20 test cases.
 
-The out of sample error is estimated at 0.02%.
+The out of sample error is estimated at 0.6%.
 
 ```{r}
-
+confusionMatrix.train(modFit)
+pred1<-predict(modFit,testing)
+(1-0.994)*100
 ```
