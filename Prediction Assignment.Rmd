@@ -1,0 +1,59 @@
+---
+title: "Prediction Assignment"
+output: html_document
+---
+## Practical Machine Learning: Prediction Assignment
+
+We load the training and test data.
+```{r}
+training<-read.csv("pml-training.csv")
+testing<-read.csv("pml-testing.csv")
+
+```
+
+We do some exploratory analyses first and then we clean the data to eliminate NA columns.
+
+```{r, warning=FALSE,results='hide',fig.keep='none'}
+str(training)
+plot(training$classe)
+colSums(is.na(training))
+training<-training[, colSums(is.na(training))+colSums(is.na(testing)) == 0]
+testing<-testing[, colSums(is.na(training))+colSums(is.na(testing)) == 0]
+```
+
+We will fit a Random Forest model, in order to predict the "classe" factor variable.
+
+Since the "classe" variable is not continous, we will use the Accuracy as error measure.
+
+Additionally, we will use parallel processing to make the model usable.
+
+```{r, cache=TRUE}
+library(parallel)
+library(doParallel)
+cluster <- makeCluster(detectCores() - 1) 
+registerDoParallel(cluster)
+
+library(caret)
+set.seed(20)
+modFit_ctrl<-trainControl(method="cv",number=5,allowParallel=TRUE)
+
+modFit <- train(classe ~ ., data = training,
+                    method = "rf",
+                    preProcess = c("center","scale"),
+
+                    trControl = modFit_ctrl)
+
+stopCluster(cluster)
+modFit
+confusionMatrix.train(modFit)
+pred1<-predict(modFit,testing)
+(1-0.9998)*100
+```
+
+Finally, we check that the Accuracy is above 99% and predict 20 test cases.
+
+The out of sample error is estimated at 0.02%.
+
+```{r}
+
+```
