@@ -1,0 +1,17 @@
+---
+title: "Plotly assignment presentation"
+output:
+  ioslides_presentation: default
+  beamer_presentation: default
+---
+## Mtcars dataset
+12th of December, 2017
+
+```{r,echo=FALSE,warning=FALSE,message=FALSE}
+library(plotly)
+data(mtcars)
+Sys.setenv("plotly_username"="valors")
+Sys.setenv("plotly_api_key"="Vzol3L9kyRxWXUnxqGT9")
+p<-plot_ly(data=mtcars,x=~wt,y=~mpg,type='scatter')
+p
+```
