@@ -1,0 +1,20 @@
+My Presentation
+========================================================
+author: Valors
+date: 12th of December, 2017
+autosize: true
+
+R Presentation and plot with Plotly
+========================================================
+
+12th of December, 2017
+
+```{r,echo=FALSE,warning=FALSE}
+library(plotly)
+library(evaluate)
+data(mtcars)
+Sys.setenv("plotly_username"="valors")
+Sys.setenv("plotly_api_key"="Vzol3L9kyRxWXUnxqGT9")
+p<-plot_ly(data=mtcars,x=~wt,y=~mpg,type='scatter')
+p
+```
